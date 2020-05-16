@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "audioeyes",
+  "private_key_id": "68236ea78337fe7bd979c28599038e08a56e1f99",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDORtSmb894NFlg\n1/MCHI7gq0T0oj4C1Z3pS1hKWOv/3TChthtjtd39BuJStY8FL9G++RAjaz3fImx/\nSR0tfNrP6PPaW535z6zf0qGh5jo96wymZNmUl9lxXbsa5kcYh0v8j1ua0RJY1nnm\nCVON4MZu+tv4a+kFaQQli36bvqr+WaGGtCnkDobRhGCQwpCv7ocL+UnHzAloDe1U\nwb4emJnZCOwBP8zSjZIfoHSdur2fxywQNfrVvFTjPov9A9N51Nx0yK+Xd9N9H9+u\n46XH4DvCo/GPr2qq47CCND0Swg1bkami3+DFdqyFA9cTe4uzEnolMDZlMIx0b9JW\n4wC3AcPhAgMBAAECggEAB6GOL2QWiEtjfRYwGsVkscIUSHqSEbfGYkGT0BhPDsWn\njWv3wm4RetFc4RNvaZE10LtVEgJfJRiYa/MP/cVPMP7cupjGFN5Odm9L5HnocK73\n5lX3yKv/cta1W87mFW237W1+RZFzfM7ebpisuyR0Itnr9lpDohwa96qb8fYRTFyC\naxBQurJqXlFwsghLbFUmkBADpwihHblw7W+x2ShlRrYFXNU98Ao55QG4p9jhy8Mu\n0moV+AB/uP2L8ROpZBgTKPbguuYgk5ieF1Ji7Ye6l0kB5Cdslmnq1ZMo4LVyTjr5\nvYX2P2otKvj67ZDXrnuoYg7GLudGGVIG9dJfvjgbqwKBgQD+GNSpzZxy2GDLA8qk\nxzVzqQ0siz/XEgNpjY1JyKHzuANPkGWs3bOCrM0vAvulBFE0/5ZxBm+A5L3X+Z4Y\nYxj6pj4kgDKUn3yo5/Gk9Oyok/OABHzV/zPdxdUouk/7TZDpvEOzNAEpmJFpfhMi\noL7Dn2+eI7fV8dJgv60dfFmaiwKBgQDP0lDsrzegssjGwgchiOSx58w0JOs18QoT\njNqshkwhSXvc3Ytuv6upNskrx+G20RolkQdlsGs2xgmAJ/kVVxgIw9Hmm24O56Xi\n/7OgbiaCO+CgTXKYRxzsSgT25m2iYDoWYM7HehRBY9ot9ibCyaVmaR8Eur6qTgS7\nklFwf0CkwwKBgB9mrClL2pCqwtNz5YAVijp/4rvlfX8zn65Uqug6XiFDVU1o19fU\nEhINDtJHeRe8f9if2VSgafkwy3E8TNhQrs6S6s0R9q49Q2eQOmGbTv/KQOZKJ68+\neYdnol8FH0s8G7N265riy137l8TEqtK1sL12H5IYceiDmO8R4O/q5RvfAoGBAIfv\nBlW6SkWHi8JOGYH627PubWhSGbO/xRqCkGo2scc4HJecJd676lmVZ0KGzIHbBiI6\nWb9PBOHf6Uj1XHxz6lmZVEtlsTh4ls4C+Qhf5DpdVhEkd2dZZHa9979Te7SxAm2u\nxrI9jNA0svpLPpE8ej6hVdOvHpWg0IGsNC7EXZEnAoGBAOk3jZUvIJUJXXjLHCT9\nZY17Qn4kshnGmXFjhOOfRp/7hLMInBemTW0B31qZOKweB0CNPpdXf3B0p1NUTCBw\nGU4SQGLbwqUwRPWI6tN4mxBBgbIpZQtKebanCQeda3AdPWMRvRsZLKOWqp2dMfNn\nDeLBW+SsTa2OQoEzNilrwtRn\n-----END PRIVATE KEY-----\n",
+  "client_email": "audioeyesreader@audioeyes.iam.gserviceaccount.com",
+  "client_id": "110558132473928802205",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/audioeyesreader%40audioeyes.iam.gserviceaccount.com"
+}
