@@ -3,6 +3,8 @@ import numpy as np
 from PIL import Image
 import pytesseract as pts
 from spellchecker import SpellChecker
+import requests
+import os
 
 class ImageInterface:
     """Class Description"""
@@ -100,11 +102,21 @@ class ImageInterface:
                 and phrase is not ''
                 and phrase is not ' '], percentEnglish
     
-    def send_to_workers(self, img):
-        return
+    def send_to_workers(self, img, contract, account, server='http://127.0.0.1:8000/upload'):
+        cv2.imwrite('../img_cache/img.png', img)
+        
+        data = open('../img_cache/img.png' ,'rb')
+        print(data)
+        r = requests.post(server, data=data)
+        
+        out = os.popen('near call ' + contract + ' req_transcription ' + '\'{"img": "' + r.text + '"}\'' + ' --account-id ' + account), r.text
+        return out
     
-    def get_solved(self):
-        return
+    def get_solved(self, img_hash, contract, account):
+        out = os.popen('near view ' + contract + ' get_transcription ' + '\'{"img": "' + img_hash + '"}\'' + ' --account-id ' + account).read()
+        os.system('near view ' + contract + ' rem_transcription ' + '\'{"img": "' + img_hash + '"}\'' + ' --account-id ' + account)
+        return [item[1:] for item in out.split('\n')[-2][1:-1].replace('\'','').replace('\\n', '\n').replace('\x1b[32m', '').replace('\x1b[39m', '').split(',')[0:2]]
     
-    def tip(self, user, amount):
-        return
+    def tip(self, user, amount, contract, account):
+        out = os.popen('near call ' + contract + ' send_tip ' + '\'{"account_id": "' + user + '"}\'' + ' --account-id ' + account + ' --amount ' + amount)
+        return out

@@ -15,18 +15,172 @@
 <body>
 	<div class="header_bar">
 		<a href="https://github.com/theCydonian/AudioEyes">About the Project</a>
+		<a style="cursor: pointer; position: relative" onclick="signOut()">Sign Out</a>
 	</div>
 	<div class="page_body">
 		<div class="window">
-			<div id="io_group">
-				<div id="img_display"></div>
-				<textarea placeholder="Enter Transcription Here"></textarea>
+			<div style="display: none" id="io_group">
+				<div data-img="" id="img_display"><img id="doc" style="display: none" src=""/></div>
+				<textarea id="trans_area" placeholder="Enter Transcription Here"></textarea>
 			</div>
 			<div id="button_group">
-				<div class="button" id="get_image">Get Image</div>
-				<div class="button" id="submit_transcription">Submit Transcription</div>
+				<div style="display: none" class="button" id="get_image" onclick="displayImage();">Get Image</div>
+				<div style="display: none" class="button" id="submit_transcription" onclick="submitButton();">Submit Transcription</div>
+				<div class="button" id="signin" onclick="signIn()">Sign in with NEAR first</div>
 			</div>
 		</div>
 	</div>
+
+	<noscript>Please Enable Javascript</noscript>
+	<script src="https://cdn.jsdelivr.net/gh/nearprotocol/near-api-js/dist/near-api-js.js"></script>
+	<script>
+		// configure network settings and key storage
+		const config = {
+		  nodeUrl: 'https://rpc.testnet.near.org',
+		  walletUrl: "http://wallet.testnet.near.org",
+		  contractName: "thecydonian.testnet",
+		  deps: {
+		    keyStore: new nearApi.keyStores.BrowserLocalStorageKeyStore()
+		  }
+		};
+
+		// open a connection to the NEAR platform
+		(async function() {
+			// Initializes NEAR API
+		  	window.near = await nearApi.connect(config);
+		  	//Initializes Wallet
+		  	window.wallet = new nearApi.WalletAccount(window.near);
+
+		  	window.walletConnection = new nearApi.WalletConnection(near)
+
+		  	// Initializing our contract APIs by contract name and configuration. ONLY IF ALREADY SIGNED IN
+		  	if (wallet.isSignedIn()) {
+		  		initContract();
+			}
+		})(window).then(function () {
+			if (wallet.isSignedIn()) {
+				document.getElementById("io_group").style.cssText = '';
+				document.getElementById("get_image").style.cssText = '';
+				document.getElementById("submit_transcription").style.cssText = '';
+				document.getElementById("signin").style.cssText = 'display: none;';
+			}
+		});
+
+		function initContract() {
+			window.contract = new nearApi.Contract(walletConnection.account(), config.contractName, 
+				{ 
+					viewMethods: ['get_request', 'get_transcription'], 
+					changeMethods: ['req_transcription', 'move_request', 'submit_transcription', 'rem_transcription', 'send_tip'] 
+				});
+		}
+
+		async function signIn() {
+			if (!wallet.isSignedIn()) {
+				document.getElementById("io_group").style.cssText = '';
+				document.getElementById("get_image").style.cssText = '';
+				document.getElementById("submit_transcription").style.cssText = '';
+				document.getElementById("signin").style.cssText = 'display: none;';
+
+				initContract();
+
+				await wallet.requestSignIn('thecydonian.testnet', 'near-api-js client-side quickstart');
+			} else {
+				alert('Already signed in as ' + wallet.getAccountId());
+			}
+		}
+
+		async function signOut() {
+			if (wallet.isSignedIn()) {
+				document.getElementById("io_group").style.cssText = 'display: none;';
+				document.getElementById("get_image").style.cssText = 'display: none;';
+				document.getElementById("submit_transcription").style.cssText = 'display: none;';
+				document.getElementById("signin").style.cssText = '';
+				await wallet.signOut();
+			} else {
+				alert('Already signed out');
+			}
+		}
+
+		async function getImage() {
+			if (wallet.isSignedIn()) {
+				return contract.move_request().then(function() {
+					return contract.get_request()
+				});
+			} else {
+				alert('Please sign in first!');
+				return null;
+			}
+		}
+
+		async function displayImage() {
+			let init = document.getElementById("get_image").textContent;
+			document.getElementById("get_image").textContent = "loading image...";
+			let init_func = document.getElementById('get_image').getAttribute("onclick");
+			document.getElementById('get_image').setAttribute("onclick", '');
+
+			getImage().then(function(res) {
+				if (res) {
+					document.getElementById('doc').style.cssText = '';
+					document.getElementById('doc').setAttribute("src", "./getFromHash/" + res);
+					document.getElementById('img_display').setAttribute("data-img", res);
+					document.getElementById("get_image").textContent = init;
+				} else {
+					alert('Come back later for a new task.');
+					document.getElementById("get_image").textContent = init;
+				}
+				document.getElementById('get_image').setAttribute("onclick", init_func);
+			}).catch(err => catchImageError(err, init, init_func));
+		}
+
+		function catchImageError(err, init, init_func) {
+			alert(err);
+			document.getElementById('get_image').setAttribute("onclick", init_func);
+			document.getElementById("get_image").textContent = init;
+		}
+
+		async function submit(input) {
+			if (wallet.isSignedIn()) {
+				return contract.submit_transcription({img: document.getElementById('img_display').getAttribute('data-img'), trans: input}).then(function() {
+					return "Successfully submitted transcription";
+				});
+			} else {
+				alert('Please sign in first!');
+				return null;
+			}
+		}
+
+		async function submitButton() {
+			let text = document.getElementById("trans_area").value;
+			let init = document.getElementById("submit_transcription").textContent;
+			document.getElementById("submit_transcription").textContent = 'submitting...';
+			let init_func = document.getElementById('submit_transcription').getAttribute("onclick");
+
+			document.getElementById('submit_transcription').setAttribute("onclick", '');
+			if (document.getElementById('img_display').getAttribute('data-img') == "" || text == "") {
+				alert("Please get image and/or write transcription first");
+				document.getElementById("submit_transcription").textContent = init;
+				document.getElementById('submit_transcription').setAttribute("onclick", init_func);
+				return;
+			}
+
+			submit(text).then(function (res) {
+				if (res == "Successfully submitted transcription") {
+					document.getElementById("trans_area").value = '';
+					document.getElementById('doc').style.cssText = 'display:none;';
+					document.getElementById('doc').setAttribute("src", "");
+					document.getElementById('img_display').setAttribute('data-img', "")
+				}
+				document.getElementById("submit_transcription").textContent = init;
+				document.getElementById('submit_transcription').setAttribute("onclick", init_func);
+			}).catch(err => catchSubmitError(err, init, init_func));
+		}
+
+		function catchSubmitError(err, init, init_func) {
+			alert(err);
+			document.getElementById("submit_transcription").textContent = init;
+			document.getElementById('submit_transcription').setAttribute("onclick", init_func);
+		}
+
+	</script>
 </body>
 </html>
